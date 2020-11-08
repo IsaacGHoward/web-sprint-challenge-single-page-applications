@@ -4,7 +4,8 @@ import {
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
+  Redirect
 } from "react-router-dom";
 import './App.css';
 import * as Yup from "yup";
@@ -26,6 +27,8 @@ const OrderForm = () => {
       instruct:''
     });
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+    const [postRes, setPostRes] = useState();
     const inputChange = e => {
         e.persist();
         let value = e.target.value;
@@ -72,13 +75,36 @@ const OrderForm = () => {
             }
         }
     };
+    const formSubmit = e => {
+        e.preventDefault();
+        console.log("Submit");
+        axios
+        .post("https://reqres.in/api/pizza", formState)
+        .then(res => {
+            //setUsers([...users, res.data]);
+            console.log("success", res);
+            setPostRes(res.data);
+            setRedirect(true);
+            
+        })
+        .catch(err => console.log(err.response));
+    };
     useEffect(() => {
         formSchema.isValid(formState).then(valid => {
           setButtonDisabled(!valid);
         });
       }, [formState]);
+      
+    if(redirect){
+        return <Redirect
+            to={{
+            pathname: "/pizza",
+            state: { pizza: postRes }
+            }}
+        />
+    }
   return (
-      <form className="App">
+      <form className="App" onSubmit={formSubmit}>
           <h1>Build Your Pizza</h1>
           <label>
               Name for Order: 

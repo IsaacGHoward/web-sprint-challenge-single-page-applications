@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import './App.css';
 import OrderForm from './OrderForm'
+import Pizza from './Pizza'
 const App = () => {
   return (
     <Router>
@@ -23,6 +24,7 @@ const App = () => {
       <Route path="/order">
         <OrderForm/>
       </Route>
+      <Route path="/pizza" render={(props) => <Pizza {...props}/>}/>
     </Router>
   );
 };
