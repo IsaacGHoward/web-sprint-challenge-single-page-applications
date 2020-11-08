@@ -69,13 +69,14 @@ const OrderForm = () => {
                     ...formState,
                     "toppings": topps
                 });
-
             }
-            
         }
-            
-        
     };
+    useEffect(() => {
+        formSchema.isValid(formState).then(valid => {
+          setButtonDisabled(!valid);
+        });
+      }, [formState]);
   return (
       <form className="App">
           <h1>Build Your Pizza</h1>
@@ -105,7 +106,8 @@ const OrderForm = () => {
           </label>
             
         <br/>
-        <button>Submit Order</button>
+        <button disabled={buttonDisabled}>Submit Order</button>
+        {errors.name.length > 0 ? (<p>{errors.name}</p>) : null}
       </form>
       
     
